@@ -35,5 +35,25 @@ module.exports = {
     } catch (err) {
       console.error(err);
     }
+  },
+  loginUser: async (args, req) => {
+    console.log(args);
+    try {
+      const user = await User.findOne({
+        email: { email: args.email }
+      });
+      if (!user) {
+        const error = new Error('ユーザーが存在しません');
+        throw error;
+      }
+      const isMatch = await user.comparePassword(args.password);
+      if (!isMatch) {
+        const error = new Error('パスワードが違います');
+        throw error;
+      }
+      return user;
+    } catch (err) {
+      console.error(err);
+    }
   }
 };

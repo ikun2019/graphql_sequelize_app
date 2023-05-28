@@ -25,6 +25,7 @@ module.exports = buildSchema(`
   """Root Mutation"""
   type RootMutation {
     createUser(userInput: UserInputData!): User!
+    loginUser(email: String!, password: String!): User!
   }
 
   """Schema"""
