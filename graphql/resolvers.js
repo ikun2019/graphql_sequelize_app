@@ -1,5 +1,6 @@
 const validator = require('validator');
 const User = require('../models/User');
+const Post = require('../models/Post');
 
 module.exports = {
   createUser: async (args, req) => {
@@ -52,6 +53,19 @@ module.exports = {
         throw error;
       }
       return user;
+    } catch (err) {
+      console.error(err);
+    }
+  },
+  createPost: async (args, req) => {
+    try {
+      const post = new Post({
+        title: args.postInput.title,
+        content: args.postInput.content,
+        imageUrl: args.postInput.imageUrl,
+      });
+      const newPost = await post.save();
+      return newPost;
     } catch (err) {
       console.error(err);
     }
