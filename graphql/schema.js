@@ -16,6 +16,10 @@ module.exports = buildSchema(`
     content: String!
     imageUrl: String!
   }
+  type AuthData {
+    token: String!
+    user: User!
+  }
 
   """Input"""
   input UserInputData {
@@ -37,7 +41,7 @@ module.exports = buildSchema(`
   """Root Mutation"""
   type RootMutation {
     createUser(userInput: UserInputData!): User!
-    loginUser(email: String!, password: String!): User!
+    loginUser(email: String!, password: String!): AuthData!
     createPost(postInput: PostInputData): Post!
   }
 

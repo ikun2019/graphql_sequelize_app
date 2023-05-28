@@ -52,7 +52,11 @@ module.exports = {
         const error = new Error('パスワードが違います');
         throw error;
       }
-      return user;
+      const token = await user.getSignedJwtToken();
+      return {
+        token,
+        user,
+      };
     } catch (err) {
       console.error(err);
     }
