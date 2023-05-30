@@ -62,16 +62,27 @@ module.exports = {
     }
   },
   createPost: async (args, req) => {
+    if (!req.isAuth) {
+      const error = new Error('認証されていません');
+      error.code = 401;
+      throw error;
+    };
     try {
-      const post = new Post({
+      // const post = new Post({
+      //   title: args.postInput.title,
+      //   content: args.postInput.content,
+      //   imageUrl: args.postInput.imageUrl,
+      // });
+      // const newPost = await post.save();
+      const newPost = await req.user.createPost({
         title: args.postInput.title,
         content: args.postInput.content,
         imageUrl: args.postInput.imageUrl,
-      });
-      const newPost = await post.save();
+        creator: req.user,
+      })
       return newPost;
     } catch (err) {
       console.error(err);
     }
-  }
+  },
 };

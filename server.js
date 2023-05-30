@@ -3,6 +3,7 @@ const { graphqlHTTP } = require('express-graphql');
 const graphqlSchema = require('./graphql/schema');
 const graphqlResolver = require('./graphql/resolvers');
 const sequelize = require('./config/db');
+const auth = require('./middleware/auth');
 
 const User = require('./models/User');
 const Post = require('./models/Post');
@@ -16,6 +17,7 @@ app.use(express.json());
 User.hasMany(Post);
 Post.belongsTo(User);
 
+app.use(auth);
 app.use('/graphql', graphqlHTTP({
   schema: graphqlSchema,
   rootValue: graphqlResolver,
