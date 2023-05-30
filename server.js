@@ -34,7 +34,7 @@ app.use('/graphql', graphqlHTTP({
 }));
 
 sequelize
-  .sync()
+  .sync({ force: false })
   .then(() => {
     app.listen(3000, () => {
       console.log('Server is running.');

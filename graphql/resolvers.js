@@ -68,21 +68,47 @@ module.exports = {
       throw error;
     };
     try {
+      const user = await User.findOne({
+        where: { id: req.userId }
+      });
       // const post = new Post({
       //   title: args.postInput.title,
       //   content: args.postInput.content,
       //   imageUrl: args.postInput.imageUrl,
+      //   creator: user,
       // });
       // const newPost = await post.save();
-      const newPost = await req.user.createPost({
+      const newPost = await user.createPost({
         title: args.postInput.title,
         content: args.postInput.content,
         imageUrl: args.postInput.imageUrl,
-        creator: req.user,
-      })
+      });
+      // user.posts.push(newPost);
+      // await user.save();
       return newPost;
     } catch (err) {
       console.error(err);
+    }
+  },
+  posts: async (args, req) => {
+    if (!req.isAuth) {
+      const error = new Error('認証されていません');
+      error.code = 401;
+      throw error;
+    }
+    try {
+      const result = await Post.findAndCountAll({
+        include: [{ model: User }]
+      });
+      console.log(result);
+      const totalPosts = result.count;
+      const posts = result.rows;
+      return {
+        posts: posts,
+        totalPosts: totalPosts,
+      }
+    } catch (err) {
+      console.log(err);
     }
   },
 };

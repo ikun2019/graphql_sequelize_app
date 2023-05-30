@@ -19,7 +19,7 @@ module.exports = async function (req, res, next) {
       req.isAuth = false;
       return next();
     }
-    req.user = user;
+    req.userId = decoded.id;
     req.isAuth = true;
     next();
   } catch (err) {
