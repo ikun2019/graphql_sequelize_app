@@ -23,6 +23,7 @@ module.exports = buildSchema(`
   type PostData {
     posts: [Post!]!
     totalPosts: Int!
+    totalPages: Int!
   }
 
   """Input"""
@@ -40,7 +41,7 @@ module.exports = buildSchema(`
   """Root Query"""
   type RootQuery {
     getUser(id: ID!): User!
-    posts: PostData!
+    getPosts: PostData!
   }
 
   """Root Mutation"""

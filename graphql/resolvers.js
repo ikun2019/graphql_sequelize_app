@@ -90,14 +90,23 @@ module.exports = {
       console.error(err);
     }
   },
-  posts: async (args, req) => {
+  getPosts: async (args, req) => {
     if (!req.isAuth) {
       const error = new Error('認証されていません');
       error.code = 401;
       throw error;
     }
+    if (!args.page) {
+      args.page = 1;
+    }
+    const perPage = 2;
     try {
       const result = await Post.findAndCountAll({
+        offset: (args.page - 1) * perPage,
+        limit: perPage,
+        order: [
+          ['createdAt', 'DESC']
+        ],
         include: [{ model: User }]
       });
       console.log(result);
@@ -106,6 +115,7 @@ module.exports = {
       return {
         posts: posts,
         totalPosts: totalPosts,
+        totalPages: Math.ceil(totalPosts / perPage),
       }
     } catch (err) {
       console.log(err);
