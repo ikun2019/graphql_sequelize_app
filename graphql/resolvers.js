@@ -90,6 +90,32 @@ module.exports = {
       console.error(err);
     }
   },
+  updatePost: async (args, req) => {
+    try {
+      if (!req.isAuth) {
+        const error = new Error('認証されていません');
+        error.code = 401;
+        throw error;
+      }
+      const post = await Post.findOne({
+        where: { id: args.id }
+      });
+      if (!post) {
+        const error = new Error('postが見つかりません');
+        error.code = 404;
+        throw error;
+      }
+      post.title = args.postInput.title;
+      post.content = args.postInput.content;
+      if (args.postInput.imageUrl !== 'undefined') {
+        post.imageUrl = args.postInput.imageUrl;
+      }
+      const updatedPost = await post.save();
+      return updatedPost;
+    } catch (err) {
+      console.error(err);
+    }
+  },
   getPosts: async (args, req) => {
     if (!req.isAuth) {
       const error = new Error('認証されていません');
@@ -121,4 +147,25 @@ module.exports = {
       console.log(err);
     }
   },
+  getPost: async (args, req) => {
+    try {
+      if (!req.isAuth) {
+        const error = new Error('認証されていません');
+        error.code = 404;
+        throw error;
+      }
+      const post = await Post.findOne({
+        where: { id: args.id },
+        include: [{ model: User }]
+      });
+      if (!post) {
+        const error = new Error('postが見つかりません');
+        error.code = 404;
+        throw error;
+      }
+      return post;
+    } catch (err) {
+      console.error(err);
+    }
+  }
 };

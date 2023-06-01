@@ -42,6 +42,7 @@ module.exports = buildSchema(`
   type RootQuery {
     getUser(id: ID!): User!
     getPosts: PostData!
+    getPost(id: ID!): Post!
   }
 
   """Root Mutation"""
@@ -49,6 +50,7 @@ module.exports = buildSchema(`
     createUser(userInput: UserInputData!): User!
     loginUser(email: String!, password: String!): AuthData!
     createPost(postInput: PostInputData): Post!
+    updatePost(id: ID!, postInput: PostInputData): Post!
   }
 
   """Schema"""
