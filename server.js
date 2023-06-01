@@ -7,6 +7,7 @@ const multer = require('multer');
 const path = require('path');
 const fs = require('fs');
 const auth = require('./middleware/auth');
+const { clearImage } = require('./util/file');
 
 const User = require('./models/User');
 const Post = require('./models/Post');
@@ -78,8 +79,3 @@ sequelize
       console.log('Server is running.');
     })
   });
-
-const clearImage = filePath => {
-  filePath = path.join(__dirname, '..', filePath);
-  fs.unlink(filePath, err => console.log(err));
-}

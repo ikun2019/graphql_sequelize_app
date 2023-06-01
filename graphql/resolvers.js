@@ -1,6 +1,7 @@
 const validator = require('validator');
 const User = require('../models/User');
 const Post = require('../models/Post');
+const { clearImage } = require('../util/file');
 
 module.exports = {
   createUser: async (args, req) => {
@@ -167,5 +168,34 @@ module.exports = {
     } catch (err) {
       console.error(err);
     }
-  }
+  },
+  deletePost: async (args, req) => {
+    try {
+      if (!req.isAuth) {
+        const error = new Error('認証されていません');
+        error.code = 404;
+        throw error;
+      }
+      const post = await Post.findOne({
+        where: { id: args.id }
+      });
+      if (!post) {
+        if (!post) {
+          const error = new Error('postが見つかりません');
+          error.code = 404;
+          throw error;
+        }
+      }
+      if (post.userId !== req.userId) {
+        const error = new Error('認証されていません');
+        error.code = 403;
+        throw error;
+      }
+      clearImage(post.imageUrl);
+      await post.findByIdAndRemove(args.id);
+      return true;
+    } catch (err) {
+      console.error(err);
+    }
+  },
 };
