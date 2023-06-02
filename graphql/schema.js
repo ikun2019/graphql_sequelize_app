@@ -9,6 +9,7 @@ module.exports = buildSchema(`
     email: String!
     password: String!
     posts: [Post!]!
+    status: String!
   }
   type Post {
     id: ID!
@@ -52,6 +53,7 @@ module.exports = buildSchema(`
     createPost(postInput: PostInputData): Post!
     updatePost(id: ID!, postInput: PostInputData): Post!
     deletePost(id: ID!): Boolean!
+    updateStatus(status: String!): User!
   }
 
   """Schema"""

@@ -198,4 +198,46 @@ module.exports = {
       console.error(err);
     }
   },
+  getUser: async (args, req) => {
+    try {
+      if (!req.isAuth) {
+        const error = new Error('認証されていません');
+        error.code = 401;
+        throw error;
+      }
+      const user = await User.findOne({
+        where: { id: req.userId }
+      });
+      if (!user) {
+        const error = new Error('ユーザーが存在しません');
+        error.code = 404;
+        throw error;
+      }
+      return user;
+    } catch (err) {
+      console.error(err);
+    }
+  },
+  updateStatus: async (args, req) => {
+    try {
+      if (!req.isAuth) {
+        const error = new Error('認証されていません');
+        error.code = 401;
+        throw error;
+      }
+      const user = await User.findOne({
+        where: { id: req.userId }
+      });
+      if (!user) {
+        const error = new Error('ユーザーが存在しません');
+        error.code = 401;
+        throw error;
+      }
+      user.status = args.status;
+      await user.save();
+      return user;
+    } catch (err) {
+      console.error(err);
+    }
+  }
 };
